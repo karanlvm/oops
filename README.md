@@ -1,13 +1,12 @@
 # oops
 
-Type `oops` after any failed command. The AI figures out what you meant and runs the fix.
+Type `oops` after any failed command. It figures out what you meant and runs the fix — **no API key needed for most errors**.
 
 ```
 $ git psuh origin main
-git: 'psuh' is not a git command.
+git: 'psuh' is not a git command. See 'git --help'.
 
 $ oops
-oops: asking Claude (Anthropic)...
 
 oops: detected a fix
 
@@ -17,7 +16,11 @@ Execute? [Y/n/e(dit)] y
 
   $ git push origin main
 Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Writing objects: 100% (3/3), 301 bytes, done.
 ```
+
+A local rule engine handles the common stuff instantly. An LLM only gets involved when the rules don't have an answer.
 
 ## Install
 
@@ -56,15 +59,15 @@ source ~/.zshrc   # zsh
 source ~/.bashrc  # bash
 ```
 
-**3. Set an LLM backend:**
+**3. (Optional) Set an LLM backend** for cases the local rules can't handle:
 
 ```sh
 export ANTHROPIC_API_KEY=sk-ant-...   # Claude haiku — fast, cheap, recommended
-export OPENAI_API_KEY=sk-...          # GPT-4o-mini (or any OpenAI-compatible API)
-# or install Ollama for fully local, private use
+export OPENAI_API_KEY=sk-...          # GPT-4o-mini (or any OpenAI-compatible endpoint)
+# or just install Ollama — auto-detected, no key needed
 ```
 
-Add the export to your shell profile so it persists across sessions.
+Most common failures are handled without step 3. Add the export to your shell profile if you want LLM fallback to persist across sessions.
 
 ## Usage
 
@@ -80,9 +83,37 @@ oops --version    print version
 
 At the confirmation prompt, press `e` to open the suggested commands in `$EDITOR` before running.
 
-## LLM backends
+## How it works
 
-Backends are checked in this order:
+oops hooks into your shell's preexec/precmd lifecycle to capture the last failed command, its exit code, working directory, and git branch. Then it runs two layers:
+
+**Layer 1 — local rule engine** (fires first, always)
+
+A set of purpose-built rules that match common failure patterns and return a fix instantly. No network, no API key, no latency. Covers the failures you actually hit day-to-day.
+
+**Layer 2 — LLM fallback** (only when Layer 1 finds nothing)
+
+If no local rule matched, oops calls whichever LLM backend you've configured and sends the shell context as a prompt. The response is parsed, safety-checked, and shown to you before anything runs.
+
+## Local rules coverage
+
+| Rule | What it fixes |
+|------|---------------|
+| `git` | Subcommand typos (`psuh` → `push`, `chekcout` → `checkout`, and 100+ more), missing `-u` on first push, non-fast-forward push, missing `-m` on commit, branch `-d`/`-D` mismatch, rebase/merge conflict abort, and more |
+| `typo` | 200+ direct substitutions for common shell command typos (`gti` → `git`, `claer` → `clear`, `pythoon` → `python3`, etc.) plus Levenshtein-1 fallback across 80+ known commands |
+| `sudo` | Prepends `sudo` for commands that need root (package managers, systemctl, mount, etc.); `chmod +x` for scripts missing the execute bit |
+| `cd` | Fuzzy-matches directory names so `cd porjects` finds `projects` in the current directory |
+| `node` | npm/yarn/pnpm subcommand typos, reads `package.json` to fix `npm run <script-typo>`, suggests `npm install` before a run script |
+| `make` | Reads `Makefile` targets and fuzzy-matches your typo to the closest real target |
+| `python` | `python` → `python3`, `pip` → `pip3`, virtual environment activation hints |
+| `docker` | Image/container typos, missing `docker compose up` before a run, `sudo` for permission errors |
+| `brew` | Subcommand typos, `brew install` suggestions for unknown commands |
+| `cargo` | Subcommand typos, `cargo build` before run when binary is missing |
+| `go` | `go run`/`build`/`test` subcommand typos and common flag mistakes |
+
+## LLM backends (optional enhancement)
+
+If you set an API key, oops uses it as a fallback for anything the local rules don't cover. Backends are checked in this order:
 
 | Backend | Env var | Model |
 |---------|---------|-------|
@@ -113,16 +144,6 @@ oops scans every suggested command for destructive patterns before running anyth
 - pipe to shell (`| bash`, `| sh`, etc.)
 
 If a match is found, oops prints a warning and requires you to type `YES` (all caps) to proceed. The `--yes` flag does **not** bypass this — it only skips the normal Y/n prompt.
-
-## How it works
-
-oops hooks into your shell's preexec/precmd lifecycle to capture:
-
-- The command that failed and its exit code
-- Recent command history (for context about what you were trying to do)
-- Working directory and current git branch
-
-That context is sent to the LLM with a prompt that asks only for corrected shell commands — no explanations, no markdown. The response is parsed, safety-checked, and shown to you before anything runs.
 
 ## Supported shells
 
