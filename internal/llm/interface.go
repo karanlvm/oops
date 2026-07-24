@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/karan/oops/internal/context"
+	"github.com/karanlvm/oops/internal/context"
 )
 
 type Backend interface {

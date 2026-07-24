@@ -3,7 +3,7 @@ package rules
 import (
 	"strings"
 
-	"github.com/karan/oops/internal/context"
+	"github.com/karanlvm/oops/internal/context"
 )
 
 // knownCmds is the set of common shell commands used for Levenshtein fallback.

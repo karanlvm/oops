@@ -3,7 +3,7 @@ package rules
 import (
 	"strings"
 
-	"github.com/karan/oops/internal/context"
+	"github.com/karanlvm/oops/internal/context"
 )
 
 // Commands that almost always require root on Linux/macOS.

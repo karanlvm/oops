@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/karan/oops/internal/context"
+	"github.com/karanlvm/oops/internal/context"
 )
 
 type cdRule struct{}

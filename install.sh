@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -e
 
-REPO="karan/oops"
+REPO="karanlvm/oops"
 BINARY="oops"
 INSTALL_DIR="/usr/local/bin"
 

@@ -7,7 +7,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/karan/oops/internal/context"
+	"github.com/karanlvm/oops/internal/context"
 )
 
 const anthropicModel = "claude-haiku-4-5"

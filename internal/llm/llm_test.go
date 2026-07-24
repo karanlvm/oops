@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/karan/oops/internal/context"
-	"github.com/karan/oops/internal/llm"
+	"github.com/karanlvm/oops/internal/context"
+	"github.com/karanlvm/oops/internal/llm"
 )
 
 func TestParseCommands(t *testing.T) {

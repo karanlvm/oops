@@ -24,19 +24,19 @@ Enumerating objects: 5, done.
 ### curl installer (recommended)
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/karan/oops/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/karanlvm/oops/main/install.sh | sh
 ```
 
 ### go install
 
 ```sh
-go install github.com/karan/oops/cmd/oops@latest
+go install github.com/karanlvm/oops/cmd/oops@latest
 ```
 
 ### Build from source
 
 ```sh
-git clone https://github.com/karan/oops
+git clone https://github.com/karanlvm/oops
 cd oops
 make install
 ```
