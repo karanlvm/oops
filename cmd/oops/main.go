@@ -8,6 +8,7 @@ import (
 
 	"github.com/karan/oops/internal/context"
 	"github.com/karan/oops/internal/llm"
+	"github.com/karan/oops/internal/rules"
 	"github.com/karan/oops/internal/runner"
 	"github.com/karan/oops/internal/safety"
 	"github.com/karan/oops/internal/shell"
@@ -50,20 +51,28 @@ func main() {
 		fatalf("oops: no failed command detected\n\nMake sure oops is installed in your shell:\n  oops --install\n")
 	}
 
-	backend, err := llm.Detect()
-	if err != nil {
-		fatalf("oops: %v\n", err)
-	}
+	// ── Layer 1: local rule engine (instant, no API key needed) ─────────────
+	commands := rules.Suggest(ctx.LastCommand, ctx.LastExitCode, ctx)
+	source := "local"
 
-	fmt.Printf("oops: asking %s...\n", backend.Name())
-
-	commands, err := backend.Fix(ctx)
-	if err != nil {
-		fatalf("oops: LLM request failed: %v\n", err)
-	}
+	// ── Layer 2: LLM fallback ────────────────────────────────────────────────
 	if len(commands) == 0 {
-		fatalf("oops: no fix found — the LLM couldn't determine a correction\n")
+		backend, err := llm.Detect()
+		if err != nil {
+			fatalf("oops: no fix found locally and no LLM configured\n\n%v\n", err)
+		}
+		fmt.Printf("oops: asking %s...\n", backend.Name())
+		commands, err = backend.Fix(ctx)
+		if err != nil {
+			fatalf("oops: LLM request failed: %v\n", err)
+		}
+		source = backend.Name()
 	}
+
+	if len(commands) == 0 {
+		fatalf("oops: no fix found\n")
+	}
+	_ = source
 
 	// Limit to 5 commands
 	if len(commands) > 5 {
