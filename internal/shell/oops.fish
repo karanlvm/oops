@@ -3,10 +3,12 @@
 
 function _oops_preexec --on-event fish_preexec
     set -gx OOPS_LAST_CMD $argv[1]
+    set -gx OOPS_OUTPUT ""
 end
 
 function _oops_precmd --on-event fish_postexec
-    set -gx OOPS_LAST_EXIT $status
+    # $argv[1] = command string, $argv[2] = exit code
+    set -gx OOPS_LAST_EXIT $argv[2]
 end
 
 function oops
