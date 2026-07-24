@@ -33,9 +33,15 @@ func BuildPrompt(ctx context.ShellContext) string {
 		sb.WriteString(ctx.GitBranch)
 		sb.WriteByte('\n')
 	}
+	if ctx.Output != "" {
+		sb.WriteString("Command output (stderr):\n")
+		sb.WriteString(ctx.Output)
+		sb.WriteByte('\n')
+	}
 
 	sb.WriteString(fmt.Sprintf("\nThe last command was: %s\n", ctx.LastCommand))
 	sb.WriteString(fmt.Sprintf("It failed with exit code %d.\n\n", ctx.LastExitCode))
+	sb.WriteString("Use the command output above (if any) to understand the specific error before suggesting a fix.\n")
 	sb.WriteString("Output ONLY the corrected command(s), one per line. No explanation, no markdown, no code blocks.\n")
 	sb.WriteString("If multiple commands are needed to achieve the goal, output them in execution order.\n")
 	sb.WriteString("Maximum 5 commands.")
