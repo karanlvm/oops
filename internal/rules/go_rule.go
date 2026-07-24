@@ -16,6 +16,32 @@ var goModSubcmds = []string{
 	"download", "edit", "graph", "init", "tidy", "vendor", "verify", "why",
 }
 
+// goSubcmdTypos catches typos that Levenshtein can't reliably disambiguate
+// due to equidistant candidates (e.g. "tset" ties between "test" and "get").
+var goSubcmdTypos = map[string]string{
+	"buidl":   "build",
+	"biuld":   "build",
+	"buld":    "build",
+	"tset":    "test",
+	"tets":    "test",
+	"testt":   "test",
+	"rnu":     "run",
+	"urn":     "run",
+	"runn":    "run",
+	"insatll": "install",
+	"isntall": "install",
+	"instlal": "install",
+	"gett":    "get",
+	"mdo":     "mod",
+	"modd":    "mod",
+	"formt":   "fmt",
+	"lsit":    "list",
+	"vesion":  "version",
+	"verison": "version",
+	"vte":     "vet",
+	"evn":     "env",
+}
+
 type goRule struct{}
 
 func (r *goRule) Name() string { return "go" }
@@ -41,6 +67,12 @@ func (r *goRule) Fix(cmd string, exitCode int, _ context.ShellContext) []string 
 		return nil
 	}
 	sub := parts[1]
+
+	// ── subcommand typo table (before Levenshtein to avoid ties) ────────────
+	if correct, ok := goSubcmdTypos[sub]; ok {
+		fixed := append([]string{"go", correct}, parts[2:]...)
+		return []string{strings.Join(fixed, " ")}
+	}
 
 	// ── go mod <sub-typo> ────────────────────────────────────────────────────
 	if sub == "mod" && len(parts) >= 3 {

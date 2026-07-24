@@ -370,9 +370,10 @@ func (r *gitRule) Fix(cmd string, exitCode int, ctx context.ShellContext) []stri
 		return []string{fmt.Sprintf("git pull origin %s", branch)}
 	}
 
-	// git commit "message" (forgot -m)
+	// git commit "message" (forgot -m) — join all remaining parts to handle quoted strings
 	if verb == "commit" && len(parts) >= 3 && !strings.HasPrefix(parts[2], "-") {
-		return []string{fmt.Sprintf("git commit -m %s", parts[2])}
+		msg := strings.Join(parts[2:], " ")
+		return []string{fmt.Sprintf("git commit -m %s", msg)}
 	}
 
 	// git branch -d unmerged → -D
