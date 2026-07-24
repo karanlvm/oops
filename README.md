@@ -33,7 +33,6 @@ curl -fsSL https://raw.githubusercontent.com/karanlvm/oops/main/install.sh | sh
 ### go install
 
 ```sh
-# Note: module path is being updated — use curl or build from source for now
 go install github.com/karanlvm/oops/cmd/oops@latest
 ```
 
