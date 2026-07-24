@@ -66,7 +66,7 @@ func Detect() (Backend, error) {
 		return NewAnthropicBackend(key), nil
 	}
 	if key := os.Getenv("OPENAI_API_KEY"); key != "" {
-		return NewOpenAIBackend(key, ""), nil
+		return NewOpenAIBackend(key, os.Getenv("OPENAI_BASE_URL")), nil
 	}
 	if ollamaAvailable() {
 		return NewOllamaBackend(""), nil

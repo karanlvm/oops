@@ -12,7 +12,7 @@ var destructivePatterns = []*regexp.Regexp{
 	regexp.MustCompile(`\bgit\s+reset\s+--hard\b`),                         // git reset --hard
 	regexp.MustCompile(`\bgit\s+(push|p)\s+.*--force\b`),                   // git push --force
 	regexp.MustCompile(`\bgit\s+(push|p)\s+.*-f\b`),                        // git push -f
-	regexp.MustCompile(`\bgit\s+clean\s+.*-f\b`),                           // git clean -f
+	regexp.MustCompile(`\bgit\s+clean\s+.*-[a-zA-Z]*f`),                    // git clean -f, -fd, -fx
 	regexp.MustCompile(`(?i)\bDROP\s+(TABLE|DATABASE|SCHEMA)\b`),            // SQL DROP
 	regexp.MustCompile(`(?i)\bTRUNCATE\s+TABLE\b`),                         // SQL TRUNCATE
 	regexp.MustCompile(`(?i)\bDELETE\s+FROM\b`),                            // SQL DELETE (no WHERE check — always flag)
