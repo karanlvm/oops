@@ -17,6 +17,7 @@ type ShellContext struct {
 	RecentHistory []HistoryEntry
 	WorkingDir    string
 	GitBranch     string
+	Output        string // stderr/stdout of the failed command (best-effort)
 }
 
 func FromEnv() ShellContext {
@@ -27,6 +28,7 @@ func FromEnv() ShellContext {
 		RecentHistory: parseHistory(os.Getenv("OOPS_HISTORY")),
 		WorkingDir:    os.Getenv("OOPS_CWD"),
 		GitBranch:     os.Getenv("OOPS_GIT_BRANCH"),
+		Output:        os.Getenv("OOPS_OUTPUT"),
 	}
 }
 
