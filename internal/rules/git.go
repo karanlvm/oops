@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/karan/oops/internal/context"
+	"github.com/karanlvm/oops/internal/context"
 )
 
 // All known git subcommands — used for Levenshtein fallback.

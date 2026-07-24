@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/karan/oops/internal/context"
+	"github.com/karanlvm/oops/internal/context"
 )
 
 var makeTargetRe = regexp.MustCompile(`^([a-zA-Z0-9][a-zA-Z0-9_\-\.]*)\s*:`)

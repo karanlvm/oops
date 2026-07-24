@@ -6,12 +6,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/karan/oops/internal/context"
-	"github.com/karan/oops/internal/llm"
-	"github.com/karan/oops/internal/rules"
-	"github.com/karan/oops/internal/runner"
-	"github.com/karan/oops/internal/safety"
-	"github.com/karan/oops/internal/shell"
+	"github.com/karanlvm/oops/internal/context"
+	"github.com/karanlvm/oops/internal/llm"
+	"github.com/karanlvm/oops/internal/rules"
+	"github.com/karanlvm/oops/internal/runner"
+	"github.com/karanlvm/oops/internal/safety"
+	"github.com/karanlvm/oops/internal/shell"
 )
 
 var version = "0.1.0"

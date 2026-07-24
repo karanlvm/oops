@@ -3,7 +3,7 @@ package safety_test
 import (
 	"testing"
 
-	"github.com/karan/oops/internal/safety"
+	"github.com/karanlvm/oops/internal/safety"
 )
 
 func TestCheck(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	ctx "github.com/karan/oops/internal/context"
+	ctx "github.com/karanlvm/oops/internal/context"
 )
 
 func TestIsValid(t *testing.T) {
