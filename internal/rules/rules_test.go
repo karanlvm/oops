@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	ctx "github.com/karan/oops/internal/context"
-	"github.com/karan/oops/internal/rules"
+	ctx "github.com/karanlvm/oops/internal/context"
+	"github.com/karanlvm/oops/internal/rules"
 )
 
 func suggest(cmd string, exit int) []string {
